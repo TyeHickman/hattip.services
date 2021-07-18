@@ -1,0 +1,302 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "This an API for Hat-Tip",
+    "version" : "1.0.0",
+    "title" : "Hat-Tip API",
+    "contact" : {
+      "email" : "tye.hickman89@gmail.com"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host" : "virtserver.swaggerhub.com",
+  "basePath" : "/TyeHickman/hattip.api/1.0.0",
+  "tags" : [ {
+    "name" : "admins",
+    "description" : "Secured Admin-only calls"
+  }, {
+    "name" : "developers",
+    "description" : "Operations available to regular developers"
+  } ],
+  "schemes" : [ "https" ],
+  "paths" : {
+    "/users/{email}" : {
+      "get" : {
+        "summary" : "searches users",
+        "description" : "By passing in the appropriate options, you can search for\navailable users in the system\n",
+        "operationId" : "searchUsers",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "email",
+          "in" : "path",
+          "description" : "pass an email string for looking up users",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "skip",
+          "in" : "query",
+          "description" : "number of records to skip for pagination",
+          "required" : false,
+          "type" : "integer",
+          "minimum" : 0,
+          "format" : "int32"
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "maximum number of records to return",
+          "required" : false,
+          "type" : "integer",
+          "maximum" : 20,
+          "minimum" : 0,
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/User"
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      }
+    },
+    "/users" : {
+      "post" : {
+        "summary" : "adds a User item",
+        "description" : "Adds a User to the system",
+        "operationId" : "addUser",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "userInfo",
+          "description" : "User info to add",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/User"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "user created"
+          },
+          "400" : {
+            "description" : "invalid input, object invalid"
+          },
+          "409" : {
+            "description" : "user already exists"
+          }
+        }
+      }
+    },
+    "/journals" : {
+      "get" : {
+        "summary" : "finds a journal",
+        "description" : "By passing in the appropriate options, you can retrieve a journal\n",
+        "operationId" : "getJournal",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "journalId",
+          "in" : "query",
+          "description" : "pass a journal id from a user",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "there was a journal",
+            "schema" : {
+              "type" : "object"
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      },
+      "post" : {
+        "summary" : "adds a Journal",
+        "description" : "Adds a Journal to the system",
+        "operationId" : "addJournal",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "journalInfo",
+          "description" : "Journal info to add",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/Journal"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "user created"
+          },
+          "400" : {
+            "description" : "invalid input, object invalid"
+          },
+          "409" : {
+            "description" : "user already exists"
+          }
+        }
+      }
+    },
+    "/entries" : {
+      "get" : {
+        "summary" : "searches entries",
+        "description" : "By passing in the appropriate options, you can search for\navailable users in the system\n",
+        "operationId" : "searchEntries",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "journalId",
+          "in" : "query",
+          "description" : "pass a journal id string for looking up that journal's entries",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "skip",
+          "in" : "query",
+          "description" : "number of records to skip for pagination",
+          "required" : false,
+          "type" : "integer",
+          "minimum" : 0,
+          "format" : "int32"
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "maximum number of records to return",
+          "required" : false,
+          "type" : "integer",
+          "maximum" : 20,
+          "minimum" : 0,
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "entries matching criteria",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/JournalEntry"
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      },
+      "post" : {
+        "summary" : "adds an entry to a Journal",
+        "description" : "Adds an entry to the system",
+        "operationId" : "addEntry",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "journalId",
+          "in" : "query",
+          "description" : "pass a journal id string for looking up that journal's entries",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "journalEntry",
+          "description" : "User info to add",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/JournalEntry"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "entry added"
+          },
+          "400" : {
+            "description" : "invalid input, object invalid"
+          },
+          "409" : {
+            "description" : "somehow, this entry already exists..."
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "User" : {
+      "type" : "object",
+      "required" : [ "dateJoined", "email", "password", "userId" ],
+      "properties" : {
+        "userId" : {
+          "type" : "string",
+          "format" : "uuid",
+          "example" : "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        },
+        "email" : {
+          "type" : "string",
+          "format" : "email",
+          "example" : "example@email.com"
+        },
+        "password" : {
+          "type" : "string"
+        },
+        "dateJoined" : {
+          "type" : "string",
+          "format" : "date-time",
+          "example" : "2016-08-29T09:12:33.001+0000"
+        }
+      }
+    },
+    "Journal" : {
+      "type" : "object",
+      "properties" : {
+        "journalId" : {
+          "type" : "string",
+          "format" : "uuid",
+          "example" : "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        },
+        "dateOpened" : {
+          "type" : "string",
+          "format" : "date-time",
+          "example" : "2016-08-29T09:12:33.001+0000"
+        },
+        "consecutiveDays" : {
+          "type" : "number",
+          "example" : 1.0
+        }
+      }
+    },
+    "JournalEntry" : {
+      "type" : "object",
+      "properties" : {
+        "entryId" : {
+          "type" : "string",
+          "format" : "uuid",
+          "example" : "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        },
+        "dateCreated" : {
+          "type" : "string",
+          "format" : "date-time",
+          "example" : "2021-08-22T01:02:03.001+0000"
+        },
+        "entryTitle" : {
+          "type" : "string",
+          "maxLength" : 50
+        },
+        "entryBody" : {
+          "type" : "string",
+          "maxLength" : 500
+        }
+      }
+    }
+  }
+}
